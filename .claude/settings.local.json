@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(awk '{s+=$2} END {print s}')",
+      "Bash(npx tsc *)"
+    ]
+  }
+}
