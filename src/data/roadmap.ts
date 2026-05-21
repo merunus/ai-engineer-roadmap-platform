@@ -359,6 +359,11 @@ export const roadmap: Phase[] = [
                 url: 'https://www.3blue1brown.com/topics/neural-networks',
                 kind: 'video',
               },
+              {
+                label: 'Karpathy — Neural Networks: Zero to Hero',
+                url: 'https://karpathy.ai/zero-to-hero.html',
+                kind: 'video',
+              },
             ],
           },
           {
@@ -483,7 +488,7 @@ export const roadmap: Phase[] = [
     order: 1,
     title: 'Phase 1 — LLM Fundamentals & Prompt Engineering',
     summary:
-      'Get from "LLMs are magic" to "I know exactly which knobs I have." API access, streaming, structured outputs, and a real prompt-engineering toolkit. ~55h.',
+      'Get from "LLMs are magic" to "I know exactly which knobs I have." API access, streaming, structured outputs, and a real prompt-engineering toolkit. ~56h.',
     modules: [
       {
         id: 'p1-m1',
@@ -593,6 +598,31 @@ export const roadmap: Phase[] = [
               {
                 label: 'OpenAI — quickstart',
                 url: 'https://platform.openai.com/docs/quickstart',
+                kind: 'docs',
+              },
+            ],
+          },
+          {
+            id: 'p1-m2-cost-planning',
+            title: 'Cost model for the whole roadmap — budget + alerts',
+            type: 'theory',
+            estimatedHours: 1,
+            description:
+              "Estimate before you spend. This roadmap leans on paid APIs in many places (embedding sweeps, RAG iteration, LLM-as-judge with Ragas, multi-tier model comparisons, a fine-tune, repeated agent runs). Realistic total program API spend: **~$50–150** if you stay disciplined — Ragas and agent loops are the main blowout risks (a careless 200-item judge eval can be a $5–10 run; rerun it 20 times and you've burned the budget).\n\nDo all of this now:\n1. Hard spend limit on both Anthropic and OpenAI accounts (e.g. $30/month each to start).\n2. Billing email alerts at 50% / 90% of cap.\n3. Build a habit: before any loop over a dataset, multiply (rows × avg tokens × $/token) on paper. If it is over $1, sample-run on 5 items first.\n4. Default to the cheapest viable model (Haiku / 4o-mini / similar) for iteration; reserve the flagship for the final pass.",
+            resources: [
+              {
+                label: 'Anthropic — pricing',
+                url: 'https://www.anthropic.com/pricing',
+                kind: 'docs',
+              },
+              {
+                label: 'OpenAI — pricing',
+                url: 'https://openai.com/api/pricing/',
+                kind: 'docs',
+              },
+              {
+                label: 'Anthropic — usage & limits (console settings)',
+                url: 'https://docs.claude.com/en/api/rate-limits',
                 kind: 'docs',
               },
             ],
@@ -790,6 +820,11 @@ export const roadmap: Phase[] = [
                 url: 'https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview',
                 kind: 'docs',
               },
+              {
+                label: 'Anthropic — interactive prompt-engineering tutorial',
+                url: 'https://github.com/anthropics/prompt-eng-interactive-tutorial',
+                kind: 'repo',
+              },
             ],
           },
           {
@@ -803,6 +838,11 @@ export const roadmap: Phase[] = [
               {
                 label: 'OpenAI — prompt engineering',
                 url: 'https://platform.openai.com/docs/guides/prompt-engineering',
+                kind: 'docs',
+              },
+              {
+                label: 'promptingguide.ai — comprehensive cross-provider guide',
+                url: 'https://www.promptingguide.ai/',
                 kind: 'docs',
               },
             ],
@@ -944,7 +984,7 @@ export const roadmap: Phase[] = [
     order: 2,
     title: 'Phase 2 — Building LLM Applications',
     summary:
-      'Move from notebooks to real apps: streaming chat UIs, tool use, multi-step workflows, and multimodal inputs in TypeScript. ~70h.',
+      'Move from notebooks to real apps: streaming chat UIs, tool use, multi-step workflows, multimodal inputs, and a small voice demo in TypeScript. ~73h.',
     modules: [
       {
         id: 'p2-m1',
@@ -1323,6 +1363,33 @@ export const roadmap: Phase[] = [
               {
                 label: 'AI SDK — generateObject',
                 url: 'https://ai-sdk.dev/docs/ai-sdk-core/generating-structured-data',
+                kind: 'docs',
+              },
+            ],
+          },
+          {
+            id: 'p2-m4-voice-realtime',
+            title: 'Voice — realtime speech in/out demo',
+            type: 'practice',
+            estimatedHours: 3,
+            description:
+              "Voice agents are now a first-class API surface. Build a small demo that does one of: (a) push-to-talk: record a clip, transcribe with Whisper, get an LLM reply, speak it back with TTS; or (b) the harder version: open a realtime WebSocket/WebRTC session to OpenAI's Realtime API and have a continuous spoken back-and-forth in the browser. Note latency budget (time-to-first-audio matters more than total tokens here).",
+            deliverable:
+              'A small voice-loop demo you can have a 60-second conversation with. Browser app or CLI both fine.',
+            resources: [
+              {
+                label: 'OpenAI — Realtime API (voice agents)',
+                url: 'https://developers.openai.com/api/docs/guides/realtime',
+                kind: 'docs',
+              },
+              {
+                label: 'OpenAI — Audio & speech (Whisper, TTS)',
+                url: 'https://developers.openai.com/api/docs/guides/audio',
+                kind: 'docs',
+              },
+              {
+                label: 'OpenAI Agents SDK — voice agents',
+                url: 'https://openai.github.io/openai-agents-js/',
                 kind: 'docs',
               },
             ],
@@ -1709,7 +1776,7 @@ export const roadmap: Phase[] = [
             type: 'practice',
             estimatedHours: 3,
             description:
-              "Wire your RAG pipeline up to Ragas. Run the metrics. Note that LLM-judge metrics cost real money — keep the eval set small while iterating.",
+              "Wire your RAG pipeline up to Ragas. Run the metrics. **Keep the eval set to 10–30 items while iterating** — every Ragas run pays per-item LLM-judge cost, and a 200-item set rerun 20 times will burn your whole roadmap budget. Scale up only for the final baseline.",
             deliverable: 'A `ragas_report.md` with baseline scores per metric.',
             resources: [
               {
@@ -1817,9 +1884,14 @@ export const roadmap: Phase[] = [
               'A trace file showing the steps the agent took + the final artifact.',
             resources: [
               {
-                label: 'OpenAI — agents handbook (concepts)',
-                url: 'https://platform.openai.com/docs/guides/agents',
+                label: 'OpenAI Agents SDK — concepts',
+                url: 'https://openai.github.io/openai-agents-python/',
                 kind: 'docs',
+              },
+              {
+                label: 'Anthropic — Building effective agents',
+                url: 'https://www.anthropic.com/research/building-effective-agents',
+                kind: 'article',
               },
             ],
           },
@@ -1937,8 +2009,8 @@ export const roadmap: Phase[] = [
                 kind: 'docs',
               },
               {
-                label: 'AutoGen',
-                url: 'https://microsoft.github.io/autogen/',
+                label: 'AutoGen (now Microsoft Agent Framework)',
+                url: 'https://microsoft.github.io/autogen/stable/',
                 kind: 'docs',
               },
             ],
@@ -2117,7 +2189,7 @@ export const roadmap: Phase[] = [
     order: 5,
     title: 'Phase 5 — Production AI Engineering',
     summary:
-      'Evals, observability, optimization, safety, and a taste of fine-tuning + deploy. This is the work no demo shows but every senior interviewer looks for. ~65h.',
+      'Evals, observability, optimization (incl. local models), safety (incl. agentic attack surface), and a taste of fine-tuning + deploy. This is the work no demo shows but every senior interviewer looks for. ~70h.',
     modules: [
       {
         id: 'p5-m1',
@@ -2165,13 +2237,18 @@ export const roadmap: Phase[] = [
             type: 'practice',
             estimatedHours: 3,
             description:
-              "Build a judge prompt for an existing project. Watch the pitfalls (verbosity bias, position bias, self-preference). Calibrate it against ~20 human-labeled examples.",
+              "Build a judge prompt for an existing project. Watch the pitfalls (verbosity bias, position bias, self-preference). Calibrate it against ~20 human-labeled examples. **Keep eval sets to 10–30 items while iterating** — every judge call costs money per item, so a calibration loop on 200 items can cost real dollars per pass.",
             deliverable:
               'A judge prompt + a calibration table (agreement % with human).',
             resources: [
               {
                 label: 'Eugene Yan — LLM evaluators',
                 url: 'https://eugeneyan.com/writing/llm-evaluators/',
+                kind: 'article',
+              },
+              {
+                label: 'Hamel Husain — your AI product needs evals',
+                url: 'https://hamel.dev/blog/posts/evals/',
                 kind: 'article',
               },
             ],
@@ -2375,6 +2452,28 @@ export const roadmap: Phase[] = [
             ],
           },
           {
+            id: 'p5-m3-ollama-local',
+            title: 'Run a local LLM with Ollama',
+            type: 'practice',
+            estimatedHours: 2,
+            description:
+              "Install Ollama. Pull a small model (e.g. `llama3.1:8b-q4_K_M` or `qwen2.5:7b`). Drive it from Python via its OpenAI-compatible endpoint. Run one of your earlier scripts against it (entity extractor or simple chat) and compare quality + latency to hosted Haiku/4o-mini.\n\nWrite down when local models actually make sense: privacy-sensitive data that can't leave the machine, offline use, cost-free iteration on prompts, or burning through evals during development. And where they don't: anything needing the frontier capability gap, anything where the laptop becomes the bottleneck.",
+            deliverable:
+              'A short comparison note: same task, hosted vs local, with numbers + a 3-bullet "when local" recommendation.',
+            resources: [
+              {
+                label: 'Ollama — docs',
+                url: 'https://docs.ollama.com/',
+                kind: 'docs',
+              },
+              {
+                label: 'Ollama — OpenAI-compatible API',
+                url: 'https://docs.ollama.com/openai',
+                kind: 'docs',
+              },
+            ],
+          },
+          {
             id: 'p5-m3-streaming-latency',
             title: 'Latency: time-to-first-token vs total',
             type: 'practice',
@@ -2432,8 +2531,8 @@ export const roadmap: Phase[] = [
                 kind: 'docs',
               },
               {
-                label: 'Llama Guard',
-                url: 'https://huggingface.co/meta-llama/LlamaGuard-7b',
+                label: 'Llama Guard 4 (12B, multimodal)',
+                url: 'https://huggingface.co/meta-llama/Llama-Guard-4-12B',
                 kind: 'tool',
               },
             ],
@@ -2451,6 +2550,33 @@ export const roadmap: Phase[] = [
                 label: 'Anthropic — safety best practices',
                 url: 'https://docs.claude.com/en/docs/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks',
                 kind: 'docs',
+              },
+            ],
+          },
+          {
+            id: 'p5-m4-agentic-trifecta',
+            title: 'Agentic attack surface — the lethal trifecta',
+            type: 'practice',
+            estimatedHours: 3,
+            description:
+              "Generic OWASP-LLM coverage misses the most dangerous shape: agents with tools. Simon Willison's **lethal trifecta** combines (1) access to private/sensitive data, (2) exposure to untrusted input (web pages, emails, tool outputs), and (3) an exfiltration vector (any outbound tool — HTTP fetch, image render, share link, even a markdown link). All three together = near-guaranteed exploit path via indirect prompt injection.\n\nTake one of your agents from phase 4 and audit it: which tools touch private data, which tools accept untrusted text (especially web/document/email content), which tools can send data out. If all three exist in one run, you have the trifecta. Mitigate by removing one leg — e.g. drop the network tool, sandbox the agent away from the private store, or treat all tool outputs as user-controlled input and re-prompt-guard them.\n\nThen actually attack it: hide a prompt injection in a document or web page the agent will read, instructing it to call its exfiltration tool with secrets in the URL. Confirm whether your mitigations stop it.",
+            deliverable:
+              'A short `trifecta-audit.md` for one of your agents: data/input/exfil mapping, mitigation chosen, and a working attack PoC that the mitigation now blocks.',
+            resources: [
+              {
+                label: 'Simon Willison — the lethal trifecta',
+                url: 'https://simonwillison.net/tags/lethal-trifecta/',
+                kind: 'article',
+              },
+              {
+                label: 'Simon Willison — prompt injection (tag)',
+                url: 'https://simonwillison.net/tags/prompt-injection/',
+                kind: 'article',
+              },
+              {
+                label: 'OWASP — LLM Top 10 (LLM01 Prompt Injection)',
+                url: 'https://owasp.org/www-project-top-10-for-large-language-model-applications/',
+                kind: 'article',
               },
             ],
           },
@@ -2503,17 +2629,17 @@ export const roadmap: Phase[] = [
             type: 'practice',
             estimatedHours: 4,
             description:
-              "Use the OpenAI fine-tuning API (cheapest) or a Hugging Face LoRA on a small open model. Pick a narrow style-transfer or classification task. Eval before/after on a held-out set.",
+              "**Primary path (~4h, OpenAI fine-tuning API):** prepare a small JSONL dataset (50–200 examples) for a narrow style-transfer or classification task — e.g. 'rewrite product descriptions in our brand voice' or 'classify support tickets into 5 buckets'. Upload, train, evaluate before vs after on a held-out set, compare cost-per-call to a base-model + few-shot prompt baseline.\n\n**Optional deeper extension (don't budget here, +8–10h if you want it):** rerun with a Hugging Face LoRA on a small open model (e.g. Llama 3.1 8B) via PEFT. You'll spend most of that extra time on dataset prep + GPU plumbing; the lesson is *that*, not the model.",
             deliverable:
-              'A short writeup with the dataset description, before/after metrics, and your conclusion.',
+              'A short writeup with the dataset description, before/after metrics, cost-per-call comparison, and your conclusion on when fine-tuning beats prompting.',
             resources: [
               {
-                label: 'OpenAI — fine-tuning API',
+                label: 'OpenAI — fine-tuning API (primary path)',
                 url: 'https://platform.openai.com/docs/guides/fine-tuning',
                 kind: 'docs',
               },
               {
-                label: 'HF — PEFT/LoRA',
+                label: 'HF — PEFT/LoRA (optional extension)',
                 url: 'https://huggingface.co/docs/peft/index',
                 kind: 'docs',
               },
@@ -2568,20 +2694,20 @@ export const roadmap: Phase[] = [
     order: 6,
     title: 'Phase 6 — Portfolio & Job Readiness',
     summary:
-      'One ambitious capstone, three sharply-presented portfolio pieces, an honest resume rewrite, and applying. ~40h.',
+      'One ambitious capstone, three sharply-presented portfolio pieces, an honest resume rewrite, and applying. ~75h.',
     modules: [
       {
         id: 'p6-m1',
         title: '6.1 Capstone',
-        goal: 'One portfolio-defining project that demonstrates you can build, evaluate, and ship a real AI product.',
+        goal: 'One portfolio-defining project that demonstrates you can build, evaluate, and ship a real AI product. Budget ~55h — integration is where the real work lives.',
         tasks: [
           {
             id: 'p6-m1-scope',
             title: 'Scope + plan the capstone',
             type: 'theory',
-            estimatedHours: 2,
+            estimatedHours: 3,
             description:
-              "Write a 1-page spec: problem, user, what success looks like, scope (must-have / nice-to-have / not-this-time). Must include: RAG, an agent, good UX, evals, observability. Pick a real audience (e.g. yourself, or 1 friend's workflow).",
+              "Write a 1-page spec: problem, user, what success looks like, scope (must-have / nice-to-have / not-this-time). Must include: RAG, an agent, good UX, evals, observability. Pick a real audience (e.g. yourself, or 1 friend's workflow). Expect integration to take longer than the sum of the parts — gluing RAG + agent + UX + evals + deploy always surfaces friction the individual modules hid, and that is normal, not a sign you misplanned.",
             resources: [
               {
                 label: 'Shape Up — basic concepts',
@@ -2594,13 +2720,18 @@ export const roadmap: Phase[] = [
             id: 'p6-m1-build-rag',
             title: 'Capstone — RAG layer',
             type: 'practice',
-            estimatedHours: 5,
+            estimatedHours: 12,
             description:
-              'Build the retrieval pipeline for your capstone: loaders, chunking, embedding, store. Wire to a UI shell.',
+              'Build the retrieval pipeline for your capstone: loaders, chunking, embedding, store. Wire to a UI shell. Expect real-data friction (encoding, OCR, long docs) to eat much of this budget.',
             deliverable: 'Retrieval works on real data and a manual sanity check.',
             resources: [
               {
-                label: '(your own phase 3 notes)',
+                label: 'Pinecone — Learn (RAG series)',
+                url: 'https://www.pinecone.io/learn/series/rag/',
+                kind: 'article',
+              },
+              {
+                label: 'applied-llms.org — RAG lessons',
                 url: 'https://applied-llms.org/',
                 kind: 'article',
               },
@@ -2610,15 +2741,20 @@ export const roadmap: Phase[] = [
             id: 'p6-m1-build-agent',
             title: 'Capstone — agentic feature',
             type: 'practice',
-            estimatedHours: 5,
+            estimatedHours: 12,
             description:
               'Add a multi-step agentic feature on top — e.g. "research this and produce a structured brief", "monitor X and notify me". Use the patterns from phase 4.',
             deliverable: 'A working multi-step feature you actually use.',
             resources: [
               {
-                label: '(your own phase 4 notes)',
+                label: 'Anthropic — Building effective agents',
                 url: 'https://www.anthropic.com/research/building-effective-agents',
                 kind: 'article',
+              },
+              {
+                label: 'LangGraph — multi-agent patterns',
+                url: 'https://docs.langchain.com/oss/python/langgraph/multi-agent',
+                kind: 'docs',
               },
             ],
           },
@@ -2626,9 +2762,9 @@ export const roadmap: Phase[] = [
             id: 'p6-m1-build-ux',
             title: 'Capstone — UX polish',
             type: 'practice',
-            estimatedHours: 4,
+            estimatedHours: 12,
             description:
-              "This is your front-end edge: streaming, optimistic UI, beautiful empty states, dark mode, mobile-friendly, keyboard shortcuts. Nothing fancy — just every detail right.",
+              "This is your front-end edge: streaming, optimistic UI, beautiful empty states, dark mode, mobile-friendly, keyboard shortcuts. Nothing fancy — just every detail right. Plan time for the regenerate / stop / error-recovery states that AI UIs need on top of normal product polish.",
             deliverable: 'A UI you would screenshot for a portfolio.',
             resources: [
               {
@@ -2636,13 +2772,18 @@ export const roadmap: Phase[] = [
                 url: 'https://ui.shadcn.com/',
                 kind: 'tool',
               },
+              {
+                label: 'Vercel AI SDK UI — chatbot',
+                url: 'https://ai-sdk.dev/docs/ai-sdk-ui/chatbot',
+                kind: 'docs',
+              },
             ],
           },
           {
             id: 'p6-m1-evals-obs',
             title: 'Capstone — evals + observability',
             type: 'practice',
-            estimatedHours: 2,
+            estimatedHours: 8,
             description:
               'Bring the project up to phase-5 standards: a real eval set, regression tests, tracing wired in. Add a "metrics" page or include screenshots in the README.',
             deliverable: 'Eval numbers + trace screenshots in the README.',
@@ -2652,20 +2793,30 @@ export const roadmap: Phase[] = [
                 url: 'https://langfuse.com/docs',
                 kind: 'docs',
               },
+              {
+                label: 'Ragas — getting started',
+                url: 'https://docs.ragas.io/en/stable/getstarted/index.html',
+                kind: 'docs',
+              },
             ],
           },
           {
             id: 'p6-m1-deploy',
             title: 'Capstone — deploy + write up',
             type: 'practice',
-            estimatedHours: 2,
+            estimatedHours: 8,
             description:
-              'Deploy publicly. Write a 600-word writeup: problem, decisions, tradeoffs, what you would do next. Link to the live demo and the code.',
+              'Deploy publicly. Write a 600-word writeup: problem, decisions, tradeoffs, what you would do next. Link to the live demo and the code. First deploys always surface env / secrets / cold-start issues — budget for them.',
             deliverable: 'Live URL + a writeup on your blog / Notion / GitHub.',
             resources: [
               {
                 label: 'Fly.io',
                 url: 'https://fly.io/docs/',
+                kind: 'docs',
+              },
+              {
+                label: 'Vercel — deploying',
+                url: 'https://vercel.com/docs',
                 kind: 'docs',
               },
             ],
@@ -2788,8 +2939,8 @@ export const roadmap: Phase[] = [
               'Write and rehearse a 90-second answer to "tell me about yourself and why AI". Anchor it in real projects. Practice out loud 5 times.',
             resources: [
               {
-                label: 'Pramp / interviewing.io — mock prep',
-                url: 'https://www.pramp.com/',
+                label: 'Exponent — peer mock interviews (formerly Pramp)',
+                url: 'https://www.tryexponent.com/practice',
                 kind: 'tool',
               },
             ],
